@@ -1,8 +1,1 @@
-<h1>Juegos creados solo con HTML, CSS y JAVASCRIPT</h1>
-<ul>
-  <li>TA-TE-TI: Finalizado</li>
-  <li>SIMON DICE: Finalizado</li>
-  <li>CLON DINOSAURIO CORRE: Por empezar...</li>
-</ul>
-
-<p>Podes probar los juegos <a href="https://geone-357.github.io/Juegos-HTML/">aqui</a></p>
+<!DOCTYPE html> <html lang="es"> <head> <meta charset="UTF-8"> <meta name="viewport" content="width=device-width, initial-scale=1.0"> <title>Juego de Plataforma</title> <style> body { margin: 0; overflow: hidden; } canvas { display: block; background: #87CEEB; } .ground { position: absolute; bottom: 0; width: 100%; height: 50px; background: green; } .player { position: absolute; bottom: 50px; width: 50px; height: 50px; background: red; } </style> </head> <body> <div class="ground"></div> <div class="player" id="player"></div> <script> const player = document.getElementById('player'); let isJumping = false; let playerPosition = 0; document.addEventListener('keydown', (e) => { if (e.key === 'ArrowRight') { player.style.left = `${player.offsetLeft + 10}px`; } if (e.key === 'ArrowLeft') { player.style.left = `${player.offsetLeft - 10}px`; } if (e.key === 'Space' && !isJumping) { isJumping = true; let jumpHeight = 0; const jumpInterval = setInterval(() => { if (jumpHeight > 100) { clearInterval(jumpInterval); const fallInterval = setInterval(() => { if (jumpHeight <= 0) { clearInterval(fallInterval); isJumping = false; } else { jumpHeight -= 5; player.style.bottom = `${jumpHeight + 50}px`; } }, 20); } else { jumpHeight += 5; player.style.bottom = `${jumpHeight + 50}px`; } }, 20); } }); </script> </body>
