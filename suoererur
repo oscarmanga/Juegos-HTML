@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Juego de Superhéroe</title>
+    <style>
+        body { margin: 0; overflow: hidden; font-family: Arial, sans-serif; }
+        canvas { display: block; background: #87CEEB; }
+        .ground { position: absolute; bottom: 0; width: 100%; height: 50px; background: green; }
+        .hero { position: absolute; bottom: 50px; width: 50px; height: 50px; background: blue; }
+        .enemy { position: absolute; bottom: 50px; width: 50px; height: 50px; background: purple; }
+    </style>
+</head>
+<body>
+    <div class="ground"></div>
+    <div class="hero" id="hero"></div>
+    <div class="enemy" id="enemy" style="left: 400px;"></div>
+    <script>
+        const hero = document.getElementById('hero');
+        let isJumping = false;
+        let heroPosition = 0;
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') {
+                hero.style.left = `${hero.offsetLeft + 10}px`;
+            }
+            if (e.key === 'ArrowLeft') {
+                hero.style.left = `${hero.offsetLeft - 10}px`;
+            }
+            if (e.key === ' ' && !isJumping) {
+                isJumping = true;
+                let jumpHeight = 0;
+                const jumpInterval = setInterval(() => {
+                    if (jumpHeight > 100) {
+                        clearInterval(jumpInterval);
+                        const fallInterval = setInterval(() => {
+                            if (jumpHeight <= 0) {
+                                clearInterval(fallInterval);
+                                isJumping = false;
+                            } else {
+                                jumpHeight -= 5;
+                                hero.style.bottom = `${jumpHeight + 50}px`;
+                            }
+                        }, 20);
+                    } else {
+                        jumpHeight += 5;
+                        hero.style.bottom = `${jumpHeight + 50}px`;
+                    }
+                }, 20);
+            }
+        });
+
+        function detectCollision(hero, enemy) {
+            const heroRect = hero.getBoundingClientRect();
+            const enemyRect = enemy.getBoundingClientRect();
+            return !(
+                heroRect.top > enemyRect.bottom ||
+                heroRect.bottom < enemyRect.top ||
+                heroRect.right < enemyRect.left ||
+                heroRect.left > enemyRect.right
+            );
+        }
+
+        function gameLoop() {
+            const enemy = document.getElementById('enemy');
+            if (detectCollision(hero, enemy)) {
+                alert("¡Has chocado con el enemigo!");
+            }
+            requestAnimationFrame(gameLoop);
+        }
+
+        gameLoop();
+    </script>
+</body>
+</html>
